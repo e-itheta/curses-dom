@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "curses-dom"
+version = "0.1.0"
+description = "terminal renderer for html/css"
+authors = ["Kevin Lai <zlnh4@umsystem.edu>"]
+
+packages = [
+    { include = "curses-dom" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+docopt = "^0.6.2"
+requests = "^2.26.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+curses-dom = "curses-dom.main:main"
