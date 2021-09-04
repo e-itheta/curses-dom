@@ -1,1 +1,3 @@
-**/__pycache__
+curses-dom/__pycache__
+dist
+.vscode
