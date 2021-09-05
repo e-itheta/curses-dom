@@ -1,20 +1,29 @@
 import collections
+import logging
 from html.parser import HTMLParser
-from io import TextIOWrapper
 from typing import *
 
-
+logger = logging.getLogger(__name__)
 
 class DOMElement:
     
-    def __init__(self, tag, attrs, parent: Optional["DOMElement"] = None, **kwargs):
+    def __init__(
+        self, tag: str, attrs: list, 
+        parent: Optional["DOMElement"] = None, 
+        **kwargs
+    ) -> None:
         self.parent = parent
         self.children = []
         self.tag = tag
         self.attrs = attrs
-        
         if parent is not None:
             parent.children.append(self)
+        
+        self.width = 0
+        self.height = 0
+
+    def render(self) -> None:
+        pass
 
 
 class Parser(HTMLParser):
@@ -23,27 +32,28 @@ class Parser(HTMLParser):
     def strip_whitespace(data: str) -> str:
         return ""
         
-    def __init__(self, logfp: TextIOWrapper):
+    def __init__(self):
         super().__init__()
-        self.logfp = logfp
         self.stack: Deque[DOMElement] = collections.deque()
     
-    def print(self, *args, **kwargs):
-        print(*args, file=self.logfp, **kwargs)
-
     def handle_starttag(self, tag: str, attrs: List[Tuple[str, str]]) -> None:
-        if tag == "body":
-            self.stack.append(DOMElement(tag, attrs))
-        else:
-            self.stack.append(DOMElement(tag, attrs, self.stack[-1]))
+        assert self.stack
+        logger.debug(f"<{tag}>")
+        self.stack.append(DOMElement(tag, attrs, self.stack[-1]))
     
-    def handle_data(self, data):
+    def handle_data(self, data) -> None:
         element = self.stack[-1]
-        self.print(data)
 
-    def handle_endtag(self, tag):
+    def handle_endtag(self, tag) -> None:
+        logger.debug(f"</{tag}>")
         self.stack.pop()
         
     def handle_data(self, data: str) -> None:
-        self.print(data.strip())
+        pass
+
+    def parse(self, data: str, head: DOMElement) -> None:
+        self.stack.append(head)
+        self.feed(data)
+        assert len(self.stack) == 1
+        del self.stack[0]
 

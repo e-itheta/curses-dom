@@ -45,7 +45,7 @@ class Box:
             padding["left"] + content["width"] + padding["right"],
             row + margin["top"] + border["top"],
             col + margin["left"] + border["left"]
-        ); self.padding.box("|", "-")
+        )
 
         self.content = parent.subpad(
             content["height"],
@@ -54,4 +54,4 @@ class Box:
             col + margin["left"] + border["left"] + padding["left"],
         )
 
-        self.content.box("c", "c")
+
