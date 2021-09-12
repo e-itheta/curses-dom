@@ -2,10 +2,10 @@
 name = "curses-dom"
 version = "0.1.0"
 description = "terminal renderer for html/css"
-authors = ["Kevin Lai <zlnh4@umsystem.edu>"]
+authors = ["Kevin Lai <kevin@e-itheta.com>"]
 
 packages = [
-    { include = "curses-dom" },
+    { include = "CursesDOM" },
 ]
 
 [tool.poetry.dependencies]
@@ -20,4 +20,4 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-curses-dom = "curses-dom.main:main"
+curses-dom = "CursesDom.main:main"
