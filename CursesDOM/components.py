@@ -79,7 +79,23 @@ class TextInput(Component):
 
 
 class RadioInput(Component):
-    pass
+    """Button state representations"""
+    selected = '(X)'
+    not_selected = "( )"
 
+    def __init__(self, window, height, width, begin_y, begin_x): 
+        assert width >= 3, "Width value too low"
+        self.radio_container = window.derwin(height, width, begin_y, begin_x)
+        self.radio_container.addstr(0, 0, self.not_selected)
+        self.state = False
+    
+    def is_selected(self):
+        """Checks whether radio button is selected or not"""
+        return self.state
+
+    def setstate(self, state: bool):
+        """Changes radio button's value based on inputted boolean"""
+        self.state = state
+        self.radio_container.addstr(0, 0, self.selected)
 
 
