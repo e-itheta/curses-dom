@@ -1,16 +1,17 @@
 from collections import defaultdict
+import collections
 import curses
 from typing import DefaultDict, Optional, Union
 
 Attributes = Union[DefaultDict[str, int], int]
 
-def create_default(arg):
+def create_default(arg) -> DefaultDict[str, int]:
     if type(arg) is int:
         return defaultdict(lambda: arg)
     elif arg is None:
         return defaultdict(int)
-    elif type(arg) is dict:
-        return defaultdict(int, arg)
+    
+    return defaultdict(int, arg)
 
 class Box:
     margin: curses.window
