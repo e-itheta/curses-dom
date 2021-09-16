@@ -13,7 +13,7 @@ class EventTarget(abc.ABC):
         pass
 
 
-class HTMLElement(abc.ABC):
+class HTMLElement(EventTarget):
     
     def __init__(self, parent: "HTMLElement"):
         self.parent = parent
@@ -24,10 +24,8 @@ class HTMLElement(abc.ABC):
         """Returns the underlying curses window object"""
         pass
     
-    
     @property
     def width(self):
-        self.window.getpar
         self.window.getmaxyx()[1]
     
     @property
