@@ -5,6 +5,9 @@ import curses
 import docopt
 import asyncio
 
+from curses import textpad
+from curses import panel
+
 from . import box
 from . import curses_util
 from . import dom
@@ -45,37 +48,37 @@ def main():
                 rlog.debug(f"{document.getElementsByTagName('div')}")
                 rlog.debug(f"{document.styleSheets}")
 
+            rlog.debug("hello")
+            #stdscr.nodelay(1)
+            stdscr.box()
+            stdscr.addstr(1, 1, "stdscr")
 
-            stdscr.nodelay(1)
-            box.Box(
-                stdscr,
-                0,
-                0, 
-                content=5,
-                margin=1,
-                border=1,
-                padding={ "top": 1, "left": 1 }
-            )
-
-            curses_util.init_key_listener(stdscr.getch, ignore={ curses.KEY_REFRESH })
+            h, w, = stdscr.getmaxyx()
+            window = stdscr.derwin(h//3, w//3, 1, 1)
+            window.box()
+            window.addstr(1, 1, "stdscr_win_1")
+            panel = curses.panel.new_panel(window)
             
-            async def quit():
-                cond = curses_util.EVENTS[ord("q")]
-                async with cond:
-                    await cond.wait()
-                    exit()
+            stdscr_win_2 = stdscr.derwin(h//3, w//3, 1, w//3 + 1)
+            stdscr_win_2.addstr(1, 1, "stdscr_win_2")
+            stdscr_win_2.box()
+            stdscr_win_2_panel = curses.panel.new_panel(stdscr_win_2)
 
-            async def refresh():
-                cond = curses_util.EVENTS[curses.KEY_RESIZE]
-                while True:
-                    async with cond:
-                        await cond.wait()
-                        
-                        stdscr.clear()
-                        stdscr.resize(*stdscr.getmaxyx())
-                        stdscr.refresh()
+            hw2, ww2 = stdscr_win_2.getmaxyx()
+            
+            stdscr_win_2_win = curses.newwin(hw2-2, ww2-2, 2, 1)
+            stdscr_win_2_win.box()
+            stdscr_win_2_win.addstr(1, 1, ("stdscr_win_2_win"))
+            stdscr_win_2_win_panel = curses.panel.new_panel(stdscr_win_2_win)
 
-            stdscr.box("|", "-")
-            loop.create_task(quit())
-            loop.create_task(refresh())
-            loop.run_forever()
+            stdscr_win_2_win_panel.move(0, 0)
+            
+
+            while True:       
+             
+                curses.panel.update_panels()
+                curses.doupdate()
+                stdscr.refresh()
+                stdscr.getch()
+
+    
