@@ -3,6 +3,9 @@ import abc
 from curses.textpad import Textbox
 
 class EventTarget(abc.ABC):
+    """
+    https://developer.mozilla.org/en-US/docs/Web/API/EventTarget
+    """
 
     def addEventListener(self, *args):
         pass
@@ -14,7 +17,16 @@ class EventTarget(abc.ABC):
         pass
 
 
-class HTMLElement(EventTarget):
+
+class Node(EventTarget):
+    pass
+
+
+class Element(Node):
+    pass
+
+
+class HTMLElement(Element):
     
     def __init__(self, parent: "HTMLElement"):
         self.parent = parent
