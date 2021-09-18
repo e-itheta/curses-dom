@@ -1,6 +1,8 @@
 import curses
 import abc
+from typing import List
 from curses.textpad import Textbox
+
 
 class EventTarget(abc.ABC):
     """
@@ -19,18 +21,113 @@ class EventTarget(abc.ABC):
 
 
 class Node(EventTarget):
-    pass
+    """
+    https://developer.mozilla.org/en-US/docs/Web/API/Node
+    """
+    
+    def __init__(self, parent: "Node"):
+        super().__init__()
+        self.parent = parent
 
+    
 
 class Element(Node):
-    pass
+    """
+    https://developer.mozilla.org/en-US/docs/Web/API/Element
+    """
+    
 
+    def __init__(self, parent: "Node"):
+        super().__init__(parent)
+        self.children: List[Node] = []
+
+        # https://developer.mozilla.org/en-US/docs/Web/API/Element/clientHeight
+        self._clientHeight = 0 # Read Only
+        self._clientWidth = 0 # Read Only
+
+        # https://developer.mozilla.org/en-US/docs/Web/API/Element/clientTop
+        self._clientTop = 0 # Read Only
+        self._clientLeft = 0 # Read Only
+
+
+        # https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollHeight
+        self._scrollHeight = 0
+        self._scrollWidth = 0
+        
+        # https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollLeft
+        self._scrollLeft = 0
+        self._scrollTop = 0
+        
+        # Max scroll
+        self._scrollTopMax = 0
+
+    @property
+    def clientHeight(self) -> int:
+        return self._clientHeight
+    
+    @property
+    def clientWidth(self) -> int:
+        return self._clientWidth
+    
+    @property
+    def clientTop(self) -> int:
+        return self.clientTop
+    
+    @property
+    def clientLeft(self):
+        return self.clientLeft
+    
+    @property
+    def scrollHeight(self):
+        return self._scrollHeight
+    
+    @scrollHeight.setter
+    def scrollHeight(self, value: int) -> int:
+        self._scrollHeight = value         
+        # TODO implement
+        return self._scrollHeight
+    
+    @property
+    def scrollWidth(self) -> int:
+        return self._scrollWidth
+    
+    @scrollWidth.setter
+    def scrollWidth(self, value):
+        self._scrollWidth = value
+        return self._scrollWidth
+    
 
 class HTMLElement(Element):
     
     def __init__(self, parent: "HTMLElement"):
+        super().__init__(parent)
+
+        # https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetHeight    
+        self._offsetHeight = 0
+        self._offsetWidth = 0
+
         self.parent = parent
-        
+    
+    @property
+    def offsetHeight(self) -> int:
+        return self._offsetHeight
+
+    @offsetHeight.setter
+    def offsetHeight(self, value) -> int:
+        self._offsetHeight = value
+    
+    @property
+    def offsetWidth(self) -> int:
+        return self._offsetWidth
+    
+    
+    @offsetWidth.setter
+    def offsetWidth(self, value) -> int:
+        self._offsetWidth = value
+        # TODO
+        return self._offsetWidth
+
+
     @abc.abstractmethod
     @property
     def window(self) -> curses.window:
